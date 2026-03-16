@@ -1,8 +1,8 @@
-group: io.kestra.plugin.template
-name: "template"
-title: "Template"
-description: "Plugin template for Kestra"
+group: io.kestra.plugin.doom
+name: "doom"
+title: "Doom"
+description: "Run Doom as a Kestra plugin — because Doom runs everywhere, even in your workflows."
 body: ""
 videos: []
-createdBy: "Kestra Core Team"
-managedBy: "Kestra Core Team"
+createdBy: "Kestra Community"
+managedBy: "Kestra Community"

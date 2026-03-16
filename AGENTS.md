@@ -1,12 +1,12 @@
-# Kestra Template Plugin
+# Kestra Doom Plugin
 
 ## What
 
-description = 'Plugin template for Kestra Exposes 1 plugin components (tasks, triggers, and/or conditions).
+Plugin that runs the Doom engine inside a Kestra workflow. Loads a standard Doom WAD file, renders the game using a BSP-based software renderer (the original Doom algorithm), and outputs an animated GIF.
 
 ## Why
 
-Enables Kestra workflows to interact with Template, allowing orchestration of Template-based operations as part of data pipelines and automation workflows.
+Because Doom runs everywhere — even in your data pipelines. This is a fun challenge in the tradition of porting Doom to pregnancy tests, printers, and PDF files.
 
 ## How
 
@@ -14,22 +14,34 @@ Enables Kestra workflows to interact with Template, allowing orchestration of Te
 
 Single-module plugin. Source packages under `io.kestra.plugin`:
 
-- `templates`
-
-Infrastructure dependencies (Docker Compose services):
-
-- `app`
+- `doom` — Kestra task
+- `doom.engine` — Pure Java Doom engine (WAD parser, BSP renderer, demo playback, GIF encoder)
 
 ### Key Plugin Classes
 
-- `io.kestra.plugin.templates.Example`
+- `io.kestra.plugin.doom.Doom` — Main Kestra task
+- `io.kestra.plugin.doom.engine.WadFile` — WAD file parser
+- `io.kestra.plugin.doom.engine.GameMap` — Map data structures and loader
+- `io.kestra.plugin.doom.engine.BspRenderer` — BSP tree software renderer
+- `io.kestra.plugin.doom.engine.DoomGame` — Game loop and demo playback
+- `io.kestra.plugin.doom.engine.Palette` — Color palette handling
+- `io.kestra.plugin.doom.engine.GifSequenceWriter` — Animated GIF encoder
 
 ### Project Structure
 
 ```
-plugin-template/
-├── src/main/java/io/kestra/plugin/templates/
-├── src/test/java/io/kestra/plugin/templates/
+plugin-doom/
+├── src/main/java/io/kestra/plugin/doom/
+│   ├── Doom.java                    (Kestra task)
+│   ├── package-info.java
+│   └── engine/
+│       ├── WadFile.java             (WAD parser)
+│       ├── GameMap.java             (Map loader)
+│       ├── BspRenderer.java         (BSP renderer)
+│       ├── DoomGame.java            (Game coordinator)
+│       ├── Palette.java             (Colors)
+│       └── GifSequenceWriter.java   (GIF output)
+├── src/test/java/io/kestra/plugin/doom/
 ├── build.gradle
 └── README.md
 ```
@@ -46,12 +58,3 @@ plugin-template/
 # Build without tests
 ./gradlew shadowJar -x test
 ```
-
-### Configuration
-
-All tasks and triggers accept standard Kestra plugin properties. Credentials should use
-`{{ secret('SECRET_NAME') }}` — never hardcode real values.
-
-## Agents
-
-**IMPORTANT:** This is a Kestra plugin repository (prefixed by `plugin-`, `storage-`, or `secret-`). You **MUST** delegate all coding tasks to the `kestra-plugin-developer` agent. Do NOT implement code changes directly — always use this agent.

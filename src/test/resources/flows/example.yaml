@@ -1,13 +1,12 @@
-id: example
-namespace: io.kestra.templates
+id: doom
+namespace: io.kestra.doom
 
 tasks:
-- id: date
-  type: io.kestra.plugin.templates.Example
-  format: "{{taskrun.startDate}}"
-- id: task-id
-  type: io.kestra.plugin.templates.Example
-  format: "{{task.id}}"
-- id: flow-id
-  type: io.kestra.plugin.templates.Example
-  format: "{{outputs['task-id'].child.value}}"
+- id: play-doom
+  type: io.kestra.plugin.doom.Doom
+  wadFile: "{{ inputs.wadFile }}"
+  map: "E1M1"
+  frames: 350
+  captureEvery: 3
+  width: 320
+  height: 200
