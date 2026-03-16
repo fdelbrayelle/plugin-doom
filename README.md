@@ -36,15 +36,46 @@
 <p align="center" style="color:grey;"><i>Get started with Kestra in 3 minutes.</i></p>
 
 
-# Kestra Plugin Template
+# Kestra Doom Plugin
 
-> A template for creating Kestra plugins
+> Because Doom runs everywhere — even in your data pipelines.
 
-This repository serves as a general template for creating a new [Kestra](https://github.com/kestra-io/kestra) plugin. It should take only a few minutes! Use this repository as a scaffold to ensure that you've set up the plugin correctly, including unit tests and CI/CD workflows.
+A [Kestra](https://github.com/kestra-io/kestra) plugin that runs the Doom engine inside a workflow. Loads a standard Doom WAD file, renders the game using a BSP-based software renderer (the original Doom algorithm), and outputs an animated GIF.
 
-![Kestra orchestrator](https://kestra.io/video.gif)
+## Example Flow
 
-## Running the project in local
+```yaml
+id: play-doom
+namespace: company.team
+
+inputs:
+  - id: map
+    type: STRING
+    defaults: E1M1
+  - id: frames
+    type: INT
+    defaults: 350
+
+tasks:
+  - id: download-wad
+    type: io.kestra.plugin.core.http.Download
+    uri: https://distro.ibiblio.org/slitaz/sources/packages/d/doom1.wad
+
+  - id: doom
+    type: io.kestra.plugin.doom.Doom
+    wadFile: "{{ outputs['download-wad'].uri }}"
+    map: "{{ inputs.map }}"
+    frames: "{{ inputs.frames }}"
+    captureEvery: 3
+    width: 320
+    height: 200
+    frameDelay: 85
+```
+
+This downloads the freely available shareware `DOOM1.WAD` (~4MB), renders the specified map, and outputs `doom.gif` in the task outputs.
+
+## Running the project locally
+
 ### Prerequisites
 - Java 21
 - Docker
