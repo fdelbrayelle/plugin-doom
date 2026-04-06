@@ -149,21 +149,16 @@ public class BspRenderer {
             }
         }
 
-        // Project to screen X
-        int screenX1 = (int) (width / 2.0 - rx1 * focalLength / depth1);
-        int screenX2 = (int) (width / 2.0 - rx2 * focalLength / depth2);
+        // Project to screen X (positive rx = right of screen)
+        int screenX1 = (int) (width / 2.0 + rx1 * focalLength / depth1);
+        int screenX2 = (int) (width / 2.0 + rx2 * focalLength / depth2);
 
-        // Ensure left-to-right ordering
-        if (screenX1 > screenX2) {
-            int tmpX = screenX1; screenX1 = screenX2; screenX2 = tmpX;
-            double tmpD = depth1; depth1 = depth2; depth2 = tmpD;
-        }
+        // Back-face cull: if the seg projects right-to-left, it faces away from the player
+        if (screenX1 >= screenX2) return;
 
         if (screenX2 < 0 || screenX1 >= width) return;
         screenX1 = Math.max(0, screenX1);
         screenX2 = Math.min(width - 1, screenX2);
-
-        if (screenX1 >= screenX2) return;
 
         // Get sector info from the linedef
         GameMap.LineDef line = map.getLineDefs()[seg.lineDef()];

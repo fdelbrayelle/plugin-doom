@@ -58,23 +58,22 @@ public class DoomGame implements AutoCloseable {
             // Try DEMO1 first
             demoData = wad.readLump("DEMO1");
             if (demoData != null && demoData.length > 13) {
-                // Parse demo header
-                // Byte 0: version, 1: skill, 2: episode, 3: map
-                // Byte 4-8: player flags (which players are present)
-                // For version 109 (Doom 1.9): bytes 4-7 are player present flags
+                // Doom 1.9 demo header (version 109), 13 bytes:
+                //   0: version, 1: skill, 2: episode, 3: map,
+                //   4: deathmatch, 5: respawn, 6: fast, 7: nomonsters,
+                //   8: consoleplayer, 9-12: playeringame[0..3]
                 int version = demoData[0] & 0xFF;
                 if (version == 109) {
-                    // Doom 1.9 demo format
                     demoPlayerCount = 0;
-                    for (int i = 4; i < 8; i++) {
+                    for (int i = 9; i < 13; i++) {
                         if (demoData[i] != 0) demoPlayerCount++;
                     }
                     if (demoPlayerCount == 0) demoPlayerCount = 1;
-                    demoPos = 8; // skip past the 8-byte header for v1.9
-                } else {
-                    // Older demo format (13 byte header)
-                    demoPlayerCount = 1;
                     demoPos = 13;
+                } else {
+                    // Older demo format (7 byte header)
+                    demoPlayerCount = 1;
+                    demoPos = 7;
                 }
             } else {
                 demoData = null;

@@ -19,6 +19,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import io.kestra.core.models.annotations.PluginProperty;
 
 @SuperBuilder
 @ToString
@@ -47,30 +48,37 @@ import java.util.List;
 public class Doom extends Task implements RunnableTask<Doom.Output> {
 
     @Schema(title = "WAD file", description = "URI to a Doom WAD file (IWAD or PWAD) in Kestra internal storage.")
+    @PluginProperty(group = "advanced")
     private Property<String> wadFile;
 
     @Schema(title = "Map name", description = "Map to load, e.g. E1M1 for Doom 1 or MAP01 for Doom 2.")
     @Builder.Default
+    @PluginProperty(group = "advanced")
     private Property<String> map = Property.of("E1M1");
 
     @Schema(title = "Number of game tics to simulate", description = "Each tic is ~1/35 second. Default 350 = ~10 seconds.")
     @Builder.Default
+    @PluginProperty(group = "advanced")
     private Property<Integer> frames = Property.of(350);
 
     @Schema(title = "Capture every N tics", description = "Capture a frame every N game tics. Lower = smoother GIF but larger file.")
     @Builder.Default
+    @PluginProperty(group = "advanced")
     private Property<Integer> captureEvery = Property.of(3);
 
     @Schema(title = "Screen width in pixels")
     @Builder.Default
+    @PluginProperty(group = "advanced")
     private Property<Integer> width = Property.of(320);
 
     @Schema(title = "Screen height in pixels")
     @Builder.Default
+    @PluginProperty(group = "advanced")
     private Property<Integer> height = Property.of(200);
 
     @Schema(title = "GIF frame delay in milliseconds")
     @Builder.Default
+    @PluginProperty(group = "advanced")
     private Property<Integer> frameDelay = Property.of(85);
 
     @Override
